@@ -23,6 +23,7 @@ use App\Http\Controllers\Dokter\{DashboardController as DokterDashboard,
     DataRekamController as DokterRekam};
 use App\Http\Controllers\Apotik\{DashboardController as ApotikDashboard};
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 
 
 Route::redirect('/', '/login');
@@ -30,6 +31,10 @@ Route::redirect('/', '/login');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+    ->name('password.request');
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->name('password.email');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

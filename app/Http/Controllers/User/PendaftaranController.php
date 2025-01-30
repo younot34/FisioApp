@@ -42,14 +42,14 @@ class PendaftaranController extends Controller
         }
 
         // Mendapatkan Poliklinik
-        $poliklinik = Poliklinik::with('dokter')->orderBy('name','asc')->get();
+        $poliklinik = Poliklinik::with('dokter.karyawan.user')->orderBy('name','asc')->get();
         $filteredPoliklinik = $poliklinik->filter(function ($poliklinik) {
             return $poliklinik->dokter != null;
         });
 
         // Mendapatkan Rekam Medis pada hari ini
         $rekam = Rekam::with('antrian')->today()->get();
-        
+
         // Menghitung total antrian yang belum diproses
         $totalAntrian = $rekam->where('status', 0)->count();
 
@@ -63,12 +63,31 @@ class PendaftaranController extends Controller
 
         $isRole6 = $this->users->role_id === 6;
         if ($isRole6) {
-            $selectedPoliklinik = $filteredPoliklinik->first(); // Ambil poliklinik pertama
-            $dokterPraktekJam = $selectedPoliklinik->dokter->jam_praktek ?? 'Belum tersedia';
-    
-            $message = "Halo! {$this->users->name}, Terima kasih telah menggunakan layanan kami. 
-                        Nomor antrean Anda adalah {$nomorAntrianHariIni}, dan jam praktek dokter adalah {$dokterPraktekJam}.";
-    
+            // Ambil dokter yang terhubung dengan poliklinik
+            $dokter = $filteredPoliklinik->first()->dokter ?? null;
+
+            if ($dokter) {
+                // Ambil jadwal dokter berdasarkan hari ini
+                $hariIni = now()->locale('id')->translatedFormat('l'); // Format hari dalam Bahasa Indonesia
+                $jadwalHariIni = $dokter->jadwals()->where('hari', $hariIni)->first();
+
+                if ($jadwalHariIni) {
+                    $dokterPraktekHari = $jadwalHariIni->hari; // Ambil hari praktek
+                    $dokterPraktekJam = $jadwalHariIni->jam_mulai . ' - ' . $jadwalHariIni->jam_selesai;
+                    $namaDokter = $dokter->karyawan->user->name ?? 'Dokter Tidak Ditemukan';
+
+                    // Pesan notifikasi yang diperbarui
+                    $message = "Halo! {$this->users->name}, Terima kasih telah menggunakan layanan kami.
+                                Nomor antrean Anda adalah {$nomorAntrianHariIni}.
+                                Dokter {$namaDokter} akan melayani pada hari {$dokterPraktekHari}
+                                pukul {$dokterPraktekJam}.";
+                } else {
+                    $message = "Halo! {$this->users->name}, hari ini belum ada jadwal praktek dokter yang tersedia.";
+                }
+            } else {
+                $message = "Halo! {$this->users->name}, dokter belum tersedia untuk poliklinik ini.";
+            }
+
             // Simpan ke sesi jika belum ada atau data baru hari ini
             $storedDate = session('message_date');
             $currentDate = now()->toDateString();
@@ -79,7 +98,6 @@ class PendaftaranController extends Controller
                 ]);
             }
         }
-
         return view('user.pendaftaran', array(
             'title' => "Dashboard Administrator | FisioApp v.1.0",
             'firstMenu' => 'pendaftaran',

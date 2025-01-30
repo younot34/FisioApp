@@ -130,7 +130,7 @@
                                                value="{{old('tanggal_lahir',$dataPasien->tanggal_lahir ??"")}}">
                                     </div>
                                 </div>
-                                
+
                                 <div class="row mt-4">
                                     <div class="col-lg-4">
                                         <label for="sex" class="form-label">JENIS KELAMIN </label>
@@ -211,7 +211,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row mt-4">
                                     <div class="col-lg-4">
                                         <label for="golongan_darah" class="form-label">GOLONGAN DARAH </label>
@@ -272,13 +272,18 @@
                                     <div class="col-lg-12">
                                         <label for="dokter_id" class="form-label">POLIKLINIK</label>
                                         <select name="dokter_id" id="dokter_id" class="form-control select @if($errors->has('dokter_id')) is-invalid @endif">
+                                            <option value="" disabled selected>Pilih Poliklinik</option>
                                             @foreach($dataPoli as $poli)
-                                                <option value="{{base64_encode($poli->dokter->id ?? "")}}" @if(base64_encode($poli->dokter->id) == old('dokter_id') ) selected @endif>{{$poli->name}}</option>
+                                                @if(isset($poli->dokter)) <!-- Pastikan dokter ada -->
+                                                    <option value="{{ base64_encode($poli->dokter->id) }}"
+                                                        @if(base64_encode($poli->dokter->id) == old('dokter_id')) selected @endif>
+                                                        {{ $poli->name }} - {{ $poli->dokter->karyawan->user->name ?? 'Dokter Tidak Ditemukan' }}
+                                                    </option>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="row mt-2">
                                     <div class="col-lg-12">
                                         <label for="suhu_badan" class="form-label">SUHU </label>
@@ -379,7 +384,6 @@
             const pekerjaan = document.getElementById('pekerjaan');
             const alamat = document.getElementById('alamat');
             const tekananDarah = document.getElementById('tekanan_darah');
-            const rate = document.getElementById('rate');
             const suhuBadan = document.getElementById('suhu_badan');
             const beratBadan = document.getElementById('berat_badan');
             const tinggiBadan = document.getElementById('tinggi_badan');

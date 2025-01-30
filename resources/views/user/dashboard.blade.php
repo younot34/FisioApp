@@ -13,6 +13,35 @@
                             </ol>
                         </div>
                     </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <p>Jadwal Dokter</p>
+                        </div>
+                        <div class="card-body">
+                            <table id="tableJadwal"
+                                class="table table-bordered dt-responsive nowrap table-striped align-middle"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th data-ordering="false" class="text-center">NO</th>
+                                        <th data-ordering="false" class="text-center">DOCTER</th>
+                                        <th data-ordering="false" class="text-center">DAY</th>
+                                        <th data-ordering="false" class="text-center">TIME</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($jadwal as $item)
+                                        <tr>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td class="text-center">{{ $item->dokter->karyawan->user->name ?? 'Nama Dokter Tidak Ditemukan' }}</td>
+                                            <td class="text-center">{{ $item->hari }}</td>
+                                            <td class="text-center">{{ $item->jam_mulai }} - {{ $item->jam_selesai }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- end page title -->

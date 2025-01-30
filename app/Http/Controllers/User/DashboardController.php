@@ -8,6 +8,7 @@ use App\Models\Pasien;
 use App\Models\Poliklinik;
 use App\Models\Rekam;
 use App\Models\User;
+use App\Models\Jadwal;
 use App\Services\Pendaftaran\PendaftaranService;
 use Exception;
 use Illuminate\Http\Request;
@@ -30,6 +31,13 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
+        $title = 'Jadwal Praktek';
+        $firstMenu = 'Jadwal';
+        $secondMenu = 'Praktek';
+
+        // Ambil semua data jadwal praktek
+        $jadwal = Jadwal::with('dokter')->get();
+
         $dataPasien = "";
         if($request->get('pasien') != null){
             try{
@@ -48,7 +56,7 @@ class DashboardController extends Controller
 
         // Mendapatkan Rekam Medis pada hari ini
         $rekam = Rekam::with('antrian')->today()->get();
-        
+
         // Menghitung total antrian yang belum diproses
         $totalAntrian = $rekam->where('status', 0)->count();
 
@@ -63,20 +71,30 @@ class DashboardController extends Controller
         $isRole6 = $this->users->role_id === 6;
         if ($isRole6) {
             // Ambil dokter yang terhubung dengan poliklinik
-            $dokter = $filteredPoliklinik->first()->dokter;
-    
-            // Ambil jadwal dokter berdasarkan hari ini (misalnya)
-            $hariIni = now()->locale('id')->format('l');
-    
-            // Cek jika ada jadwal untuk hari ini
-            $jadwalHariIni = $dokter->jadwals()->where('hari', $hariIni)->first();
+            $dokter = $filteredPoliklinik->first()->dokter ?? null;
 
-            $dokterPraktekJam = $jadwalHariIni ? $jadwalHariIni->jam_mulai . ' - ' . $jadwalHariIni->jam_selesai : 'Belum tersedia';
-    
-            // Pesan
-            $message = "Halo! {$this->users->name}, Terima kasih telah menggunakan layanan kami. 
-                        Nomor antrean Anda adalah {$nomorAntrianHariIni}, dan jam praktek dokter adalah {$dokterPraktekJam}.";
-    
+            if ($dokter) {
+                // Ambil jadwal dokter berdasarkan hari ini
+                $hariIni = now()->locale('id')->translatedFormat('l'); // Format hari dalam Bahasa Indonesia
+                $jadwalHariIni = $dokter->jadwals()->where('hari', $hariIni)->first();
+
+                if ($jadwalHariIni) {
+                    $dokterPraktekHari = $jadwalHariIni->hari; // Ambil hari praktek
+                    $dokterPraktekJam = $jadwalHariIni->jam_mulai . ' - ' . $jadwalHariIni->jam_selesai;
+                    $namaDokter = $dokter->karyawan->user->name ?? 'Dokter Tidak Ditemukan';
+
+                    // Pesan notifikasi yang diperbarui
+                    $message = "Halo! {$this->users->name}, Terima kasih telah menggunakan layanan kami.
+                                Nomor antrean Anda adalah {$nomorAntrianHariIni}.
+                                Dokter {$namaDokter} akan melayani pada hari {$dokterPraktekHari}
+                                pukul {$dokterPraktekJam}.";
+                } else {
+                    $message = "Halo! {$this->users->name}, hari ini belum ada jadwal praktek dokter yang tersedia.";
+                }
+            } else {
+                $message = "Halo! {$this->users->name}, dokter belum tersedia untuk poliklinik ini.";
+            }
+
             // Simpan ke sesi jika belum ada atau data baru hari ini
             $storedDate = session('message_date');
             $currentDate = now()->toDateString();
@@ -92,6 +110,10 @@ class DashboardController extends Controller
             'firstMenu' => 'dashboard',
             'secondMenu' => 'dashboard',
             'message' => $message,
+            'jadwal' => $jadwal,
+            'totalAntrian' => $totalAntrian,
+            'onProsesAntrian' => $onProsesAntrian,
+            'dataPasien' => $dataPasien,
         ));
     }
 }

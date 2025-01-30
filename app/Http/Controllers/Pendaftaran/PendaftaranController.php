@@ -55,7 +55,7 @@ class PendaftaranController extends Controller
 
         // Mendapatkan Rekam Medis pada hari ini
         $rekam = Rekam::with('antrian')->today()->get();
-        
+
         // Menghitung total antrian yang belum diproses
         $totalAntrian = $rekam->where('status', 0)->count();
 
@@ -75,7 +75,7 @@ class PendaftaranController extends Controller
             'dataPoli' => $filteredPoliklinik,
             'totalAntrian' => $totalAntrian,
             'onProsesAntrian' => $onProsesAntrian,
-            'nomorAntrianHariIni' => $nomorAntrianHariIni,  // Kirim nomor antrian hari ini ke view
+            'nomorAntrianHariIni' => $nomorAntrianHariIni,
         ));
     }
     private function generateZero($totalData, $length, $lastId):string
