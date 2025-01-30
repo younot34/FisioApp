@@ -67,7 +67,11 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## How to install
 - composer install Or composer update
+- npm install
+- npm audit fix
+- npm run build
 - cp .env.example .env
 - php artisan key:generate
 - php artisan migrate
 - php artisan migrate --seed
+- jalankan .\mailpit.exe jika ingin menggunakan fitur forgot password
