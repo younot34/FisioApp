@@ -93,7 +93,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function () {
     });
 
     Route::group(['roles' => 'pendaftaran'], function () {
-        Route::get('/front/dashboard', [FrontDashboard::class, 'index'])->name('front.dashboard');
+        // Route::get('/front/dashboard', [FrontDashboard::class, 'index'])->name('front.dashboard');
         Route::get('/front/pendaftaran', [FrontDaftar::class, 'index'])->name('front.pendaftaran');
         Route::post('/front/pendaftaran', [FrontDaftar::class, 'store'])->name('front.pendaftaran.save');
 
@@ -112,7 +112,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function () {
     });
 
     Route::group(['roles' => 'dokter'], function () {
-        Route::get('/dokter/dashboard', [DokterDashboard::class, 'index'])->name('dokter.dashboard');
+        // Route::get('/dokter/dashboard', [DokterDashboard::class, 'index'])->name('dokter.dashboard');
         Route::get('/dokter/pemeriksaan', [DokterRekam::class, 'index'])->name('dokter.pemeriksaan');
         Route::get('/dokter/pemeriksaan/proses', [DokterRekam::class, 'proses'])->name('dokter.pemeriksaan.proses');
         Route::post('/dokter/pemeriksaan/proses', [DokterRekam::class, 'selesai_periksa'])->name('dokter.pemeriksaan.selesai');
@@ -120,7 +120,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function () {
     });
 
     Route::group(['roles' => 'apotik'], function () {
-        Route::get('/apoteker/dashboard', [ApotikDashboard::class, 'index'])->name('apoteker.dashboard');
+        // Route::get('/apoteker/dashboard', [ApotikDashboard::class, 'index'])->name('apoteker.dashboard');
     });
 });
 

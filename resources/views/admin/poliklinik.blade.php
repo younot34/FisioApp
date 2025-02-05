@@ -16,12 +16,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-transparent">
-                        <h4 class="mb-sm-0">Data Poliklinik</h4>
+                        <h4 class="mb-sm-0">Data Fisioterapi</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="{{route('adm.dashboard')}}">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Data Poliklinik</li>
+                                <li class="breadcrumb-item active">Data Fisioterapi</li>
                             </ol>
                         </div>
 
@@ -79,7 +79,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <label
-                                    for="name" class="form-label">NAMA POLIKLINIK</label>
+                                    for="name" class="form-label">NAMA Fisioterapi</label>
                                 <input type="text" name="name" id="name" class="form-control"
                                        value="{{old('name')}}" maxlength="255"/>
                             </div>
@@ -118,7 +118,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <label
-                                    for="nameEdit" class="form-label">NAMA POLIKLINIK</label>
+                                    for="nameEdit" class="form-label">NAMA Fisioterapi</label>
                                 <input type="text" name="name" id="nameEdit" class="form-control"
                                        value="{{old('name')}}" maxlength="255"/>
                             </div>
