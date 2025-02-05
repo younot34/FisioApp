@@ -39,7 +39,7 @@
                                     <div class="col-lg-6">
                                         <div class="row">
                                             <div class="col-lg-6">
-                                                <label for="dokter" class="form-label">Dokter <span
+                                                <label for="dokter" class="form-label">Fisioterapi<span
                                                     class="text-danger"> *</span></label>
                                                 <select name="dokter_id" id="dokter" class="form-control">
                                                     @foreach($dokters as $dokter)

@@ -41,7 +41,7 @@
                                 <thead>
                                     <tr>
                                         <th data-ordering="false" class="text-center">NO</th>
-                                        <th data-ordering="false" class="text-center">DOCTER</th>
+                                        <th data-ordering="false" class="text-center">FISIOTERAPI</th>
                                         <th data-ordering="false" class="text-center">DAY</th>
                                         <th data-ordering="false" class="text-center">TIME</th>
                                         <th class="text-center">ACTION</th>
