@@ -17,6 +17,13 @@ COPY . /var/www/html
 # Set working dir
 WORKDIR /var/www/html
 
+# Tambah Node.js & Vite build
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
+
+# Install deps & build assets
+RUN npm install && npm run build
+
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -31,10 +38,3 @@ COPY ./000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Expose port
 EXPOSE 80
-
-# Install Node.js (wajib untuk Vite)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs
-
-# Install dependencies frontend
-RUN npm install && npm run build
