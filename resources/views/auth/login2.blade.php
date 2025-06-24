@@ -10,7 +10,7 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description"/>
     <meta content="Themesbrand" name="author"/>
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset('template/velzon/')}}assets/images/favicon.ico">
+    <link rel="shortcut icon" href="{{asset('template/velzon/assets/images/favicon.ico')}}">
 
     <!-- Layout config Js -->
     <script src="{{asset('template/velzon/assets/js/layout.js')}}"></script>
@@ -43,7 +43,7 @@
                                     <div class="position-relative h-100 d-flex flex-column">
                                         <div class="mb-4">
                                             <a href="#" class="d-block">
-                                                <img src="{{asset('template/velzon/')}}assets/images/logo-light.png"
+                                                <img src={{ asset('template/velzon/assets/images/logo-light.png') }}"
                                                      alt="" height="18">
                                             </a>
                                         </div>
