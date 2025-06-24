@@ -31,3 +31,10 @@ COPY ./000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Expose port
 EXPOSE 80
+
+# Install Node.js (wajib untuk Vite)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
+
+# Install dependencies frontend
+RUN npm install && npm run build
