@@ -1,3 +1,5 @@
+FROM composer:latest AS composer
+
 # Use official PHP image with Apache
 FROM php:8.2-apache
 
